@@ -1,0 +1,6 @@
+framework module Pods_FideBase {
+  umbrella header "Pods-FideBase-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>999869564955-v6r1f3ekod4f2ld8lsqjlmd9uc82d791.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.999869564955-v6r1f3ekod4f2ld8lsqjlmd9uc82d791</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBvXa2ohfSMZahl-uoOOGzfxYadNdsD86w</string>
+	<key>GCM_SENDER_ID</key>
+	<string>999869564955</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>Arihant.FideBase</string>
+	<key>PROJECT_ID</key>
+	<string>fide-39e95</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fide-39e95.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:999869564955:ios:59675b5d6d3e599be010be</string>
+</dict>
+</plist>
