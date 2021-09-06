@@ -49,31 +49,51 @@ class RegisterViewController: UIViewController {
               let email = emailField.text,
               let cpassword = createpasswordField.text,
               let rpassword = repasswordField.text,
+              let groupName = groupField.text,
+              let dateBirth = dobField.text,
               !name.isEmpty,
               !email.isEmpty,
               !cpassword.isEmpty,
               !rpassword.isEmpty,
               cpassword.count >= 6,
-              rpassword.count >= 6 else{
+              rpassword.count >= 6,
+              cpassword == rpassword else{
             alertUserRegistrationError()
             return
         }
         //Firebase Registration
         
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: cpassword, completion: { authResult,error in
-            guard let result = authResult, error == nil else{
-                print("Error Creating User")
+        DatabaseManager.shared.userExists(with: email, completion: { [weak self] exists in
+            
+            guard let strongSelf = self else{
                 return
             }
-            let user = result.user
-            print("Created User\(user)")
+            
+            guard !exists else{
+                print("Email exists")
+                self?.alertUserRegistrationError(message: "Looks like this Email-Id already exists !")
+                return
+            }
+            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: cpassword, completion: { authResult,error in
+                guard authResult != nil, error == nil else{
+                    print("Error Creating User")
+                    return
+                }
+                DatabaseManager.shared.insertUser(with: ChatAppUser(name: name, emailAddress: email, groupName: groupName, dateOfBirth: dateBirth))
+                self?.userLoggedin()
+            })
         })
-        
         
 
     }
-    func alertUserRegistrationError(){
-        let alert = UIAlertController(title: "Whoops", message: "Please fill all details correctly for Registration", preferredStyle: .alert)
+    func userLoggedin(){
+        let dashboardVC = UIStoryboard(name: "Main", bundle: nil)
+        let vc = (storyboard?.instantiateViewController(identifier: "DashboardViewController"))!
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
+    }
+    func alertUserRegistrationError(message: String = "Please Enter all information to create new account."){
+        let alert = UIAlertController(title: "Whoops", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         present(alert, animated: true)
     }

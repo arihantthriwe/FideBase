@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
 
@@ -19,35 +20,30 @@ class LoginViewController: UIViewController {
         // Do any additional setup after loading the view.
         title = "Log In"
         appIcon.image = UIImage(named: "LoginPage")
-
-//        let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
-//        backgroundImage.image = UIImage(named: "background")
-//        backgroundImage.contentMode = UIView.ContentMode.scaleAspectFill
-//        self.view.insertSubview(backgroundImage, at: 0)
-//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
-  //      view.layer.contents = UIImage(imageLiteralResourceName : "background").cgImage
         loginButton.addTarget(self, action: #selector(loginClicked), for: .touchUpInside)
         emailField.delegate = self
         passwordField.delegate = self
         setupButtonStyle()
         registerButton.addTarget(self, action: #selector(registerClicked), for: .touchUpInside)
     }
+    override func viewDidAppear(_ animated: Bool) {
+
+        validateAuth()
+    }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
-        let islogged_in = UserDefaults.standard.bool(forKey: "Logged_in")
-        
-        if !islogged_in {
-            let vc = LoginViewController()
-            let nav = UINavigationController(rootViewController: vc)
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: false)
+
+    }
+    func validateAuth(){
+        if FirebaseAuth.Auth.auth().currentUser != nil {
+            userLoggedin()
         }
     }
     func setupButtonStyle(){
         registerButton.layer.cornerRadius = 15.0
         loginButton.layer.cornerRadius = 15.0
     }
+
     @objc func registerClicked(){
         let registerVC = UIStoryboard(name: "Main", bundle: nil)
         let vc = (storyboard?.instantiateViewController(identifier: "RegisterViewController"))!
@@ -61,7 +57,23 @@ class LoginViewController: UIViewController {
             return
         }
         //Firebase Login
+        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { [weak self] authResult, error in
+            guard let result = authResult, error == nil else{
+                print("Failed to log in user with email:\(email)")
+                return
+            }
+            let user = result.user
+            print("Logged in user: \(user)")
+//            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            self?.userLoggedin()
+        })
         
+    }
+    func userLoggedin(){
+        let dashboardVC = UIStoryboard(name: "Main", bundle: nil)
+        let vc = (storyboard?.instantiateViewController(identifier: "DashboardViewController"))!
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: false)
     }
     func alertUserLoginError(){
         let alert = UIAlertController(title: "Woops", message: "Please enter all information to Login", preferredStyle: .alert)

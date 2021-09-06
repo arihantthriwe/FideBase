@@ -6,20 +6,24 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class DashboardViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .red
+//        DatabaseManager.shared.test()
         // Do any additional setup after loading the view.
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        validateAuth()
         
-        let islogged_in = UserDefaults.standard.bool(forKey: "Logged_in")
-        
-        if !islogged_in {
+       
+    }
+    private func validateAuth(){
+        if FirebaseAuth.Auth.auth().currentUser == nil {
             let vc = LoginViewController()
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen
